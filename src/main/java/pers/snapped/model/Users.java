@@ -1,5 +1,6 @@
 package pers.snapped.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,8 @@ import java.util.Date;
  * ░ ░         ░ ░        ░  ░░  ░      ░  ░
  * ░ ░
  */
-public class Users {
+public class Users implements Serializable {
+    private static final long serialVersionUID = -5777087411037034491L;
     private Long id;
     private String nickname;
     private String password;

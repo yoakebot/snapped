@@ -37,6 +37,16 @@ public class RedisService {
 
     }
 
+    public <T> long del(KeyPrefix prefix, String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String realKey = prefix.getPrefix() + key;
+            return jedis.del(realKey);
+        } finally {
+            close(jedis);
+        }
+    }
 
     public <T> boolean set(KeyPrefix prefix, String key, T value) {
         Jedis jedis = null;
@@ -72,11 +82,11 @@ public class RedisService {
     public <T> boolean exists(KeyPrefix prefix, String key) {
         Jedis jedis = null;
         try {
-            jedis =  jedisPool.getResource();
+            jedis = jedisPool.getResource();
             //生成真正的key
-            String realKey  = prefix.getPrefix() + key;
-            return  jedis.exists(realKey);
-        }finally {
+            String realKey = prefix.getPrefix() + key;
+            return jedis.exists(realKey);
+        } finally {
             close(jedis);
         }
     }

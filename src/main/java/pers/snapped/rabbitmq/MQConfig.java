@@ -1,6 +1,7 @@
 package pers.snapped.rabbitmq;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * ▓██   ██▓ ▒█████   ▄▄▄       ██ ▄█▀▓█████
@@ -15,6 +16,6 @@ import org.springframework.context.annotation.Configuration;
  * ░ ░
  */
 @Configuration
+@Component
 public class MQConfig {
-    public static final String SNAPPED_QUEUE = "SNAPPED_QUEUE";
 }

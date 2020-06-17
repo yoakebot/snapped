@@ -1,5 +1,7 @@
 package pers.snapped.rabbitmq;
 
+import java.io.Serializable;
+
 import pers.snapped.model.Users;
 
 /**
@@ -14,7 +16,8 @@ import pers.snapped.model.Users;
  * ░ ░         ░ ░        ░  ░░  ░      ░  ░
  * ░ ░
  */
-public class SnappedMessage {
+public class SnappedMessage implements Serializable {
+    private static final long serialVersionUID = 630750438884729596L;
     private Long goodsId;
     private Users users;
 
