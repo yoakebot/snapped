@@ -65,11 +65,13 @@ public class MQReceiver {
         GoodsVO goods = goodsService.getGoodsById(goodsId);
         if (goods.getStockCount() <= 0) {
             //库存不足
+            channel.basicAck((Long) headers.get(AmqpHeaders.DELIVERY_TAG), false);
             return;
         }
         SnappedOrder snappedOrder = orderService.getOrderByUserIdAndGoodId(users.getId(), goodsId);
         if (snappedOrder != null) {
             //重复秒杀
+            channel.basicAck((Long) headers.get(AmqpHeaders.DELIVERY_TAG), false);
             return;
         }
         OrderVO orderInfo = null;
@@ -79,6 +81,7 @@ public class MQReceiver {
             e.printStackTrace();
         }
         if (orderInfo == null) {
+            channel.basicAck((Long) headers.get(AmqpHeaders.DELIVERY_TAG), false);
             return;
         }
         redisService.set(GoodsKey.getOrderDetail, users.getId() + "" + goodsId, orderInfo);
