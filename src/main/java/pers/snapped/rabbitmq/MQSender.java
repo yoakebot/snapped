@@ -2,6 +2,7 @@ package pers.snapped.rabbitmq;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class MQSender {
     public void sender(SnappedMessage snappedMessage) {
         rabbitTemplate.setConfirmCallback(confirmCallback);
         rabbitTemplate.setReturnCallback(returnCallback);
-        rabbitTemplate.convertAndSend("order.exchange", "order.routing", snappedMessage);
+        String userId = snappedMessage.getUsers().getId().toString();
+        rabbitTemplate.convertAndSend("order.exchange", "order.routing", snappedMessage, new CorrelationData(userId));
     }
 }

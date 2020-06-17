@@ -1,5 +1,15 @@
 package pers.snapped.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +36,6 @@ import pers.snapped.service.SnappedService;
 import pers.snapped.vo.GoodsVO;
 import pers.snapped.vo.OrderVO;
 import pers.snapped.vo.SnappedOrderVO;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * ▓██   ██▓ ▒█████   ▄▄▄       ██ ▄█▀▓█████
@@ -113,7 +113,7 @@ public class GoodsController implements InitializingBean {
         snappedOrderVO.setRemainSeconds(remainSeconds);
         snappedOrderVO.setStatus(status);
         snappedOrderVO.setUsers(users);
-        redisService.set(GoodsKey.getStock, "" + goodsId, goods.getStockCount());
+        redisService.set(GoodsKey.getStock, "" + goodsId, goods.getStockCount() * 2);
         isOver.put(goods.getId(), false);
         return Result.success(snappedOrderVO);
     }
@@ -133,7 +133,7 @@ public class GoodsController implements InitializingBean {
      *
      * @param user
      * @param goodsId
-     * @param siteCode 秒杀暴露地址
+     * @param siteCode 验证码
      * @return
      */
     @RequestMapping(value = "snapped", method = RequestMethod.POST)
@@ -244,7 +244,7 @@ public class GoodsController implements InitializingBean {
         List<GoodsVO> list = goodsService.listSnappedOrder();
         if (list != null) {
             for (GoodsVO goodsVO : list) {
-                redisService.set(GoodsKey.getStock, "" + goodsVO.getId(), goodsVO.getStockCount());
+                redisService.set(GoodsKey.getStock, "" + goodsVO.getId(), goodsVO.getStockCount() * 2);
                 isOver.put(goodsVO.getId(), false);
             }
         }

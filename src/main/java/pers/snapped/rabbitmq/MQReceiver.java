@@ -72,7 +72,12 @@ public class MQReceiver {
             //重复秒杀
             return;
         }
-        OrderVO orderInfo = snappedService.snapped(users, goods);
+        OrderVO orderInfo = null;
+        try {
+            orderInfo = snappedService.snapped(users, goods);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (orderInfo == null) {
             return;
         }
